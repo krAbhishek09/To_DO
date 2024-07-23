@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Todo</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <style>
+      body {
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        font-family: 'Arial', sans-serif;
+      }
+      .container {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 2rem;
+        max-width: 800px;
+        margin: auto;
+      }
+      h1 {
+        color: #333;
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      .btn-primary {
+        background-color: #28a745;
+        border: none;
+        border-radius: 50px;
+        padding: 0.5rem 2rem;
+        font-size: 1.1rem;
+      }
+      .btn-primary:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+      }
+      .form-control {
+        border-radius: 8px;
+        box-shadow: none;
+        border: 1px solid #ced4da;
+      }
+      .form-control:focus {
+        border-color: #28a745;
+        box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+      }
+      .form-label {
+        display: block;
+        text-align: center; /* Center the label text */
+        font-size: 1.1rem; /* Medium size font */
+        font-weight: 700; /* Bold font */
+        color: #555;
+        margin-bottom: 0.5rem; /* Spacing between label and input */
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+        text-align: center; /* Center the form group content */
+      }
+      .table th,
+      .table td {
+        text-align: center; /* Center-align table cells */
+      }
+      @media (max-width: 576px) {
+        .container {
+          padding: 1rem;
+        }
+      }
+      
+      .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .table-custom thead {
+        background-color: #343a40;
+        color: #ffffff;
+      }
+      
+      .table-custom th,
+      .table-custom td {
+        padding: 1rem;
+        text-align: center;
+        border-bottom: 1px solid #dee2e6;
+      }
+      
+      .table-custom tbody tr:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+      
+      .table-custom tbody tr:hover {
+        background-color: #e9ecef;
+      }
+      
+      .table-custom .btn {
+        margin: 0.2rem;
+      }
+      
+      .text-center {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="mb-4">Create a New Todo</h1>
+      <form action="{% url 'create_todo' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="title" name="title" placeholder="Enter todo title" required />
+        </div>
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter todo description"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="due_date" class="form-label">Due Date</label>
+          <input type="date" class="form-control" id="due_date" name="due_date" />
+        </div>
+        <button type="submit" class="btn btn-primary">Create Todo</button>
+      </form>
+    </div>
+
+    <!-- Table Section -->
+    <table class="table table-custom">
+      <thead>
+        <tr>
+          <th>Sno.</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for todo in todos %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ todo.title }}</td>
+            <td>{{ todo.description }}</td>
+            <td>
+                <a class="btn tn-sm btn-dark" href="{%url 'complete_todo' todo.id %}">Completed</a>
+              <a href="{% url 'edit_todo' todo.id %}" class="btn btn-warning btn-sm">Edit</a>
+              <a href="{% url 'delete_todo' todo.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4" class="text-center">No todos available.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
